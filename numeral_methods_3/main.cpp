@@ -1,23 +1,4 @@
-#include <iostream>
-#include <cmath>
-#include <vector>
-#include <iomanip>
-constexpr auto EPS = 1e-6;
-using namespace std;
-
-vector<vector<double>> Inverse2(vector<vector<double>> A) {
-    if (A.size() == 2 and A[0].size() == 2){
-        auto a = A[0][0];
-        auto b = A[0][1];
-        auto c = A[1][0];
-        auto d = A[1][1];
-        auto Det = a * d - b * c;
-        A = { {d / Det,-b / Det},
-                {-c / Det,a / Det} };
-        return A;
-    }
-    exit(0);
-}
+#include "vector.h"
 
 double Func( double x) {
     return (1 / tan(x) - x * x);
@@ -29,8 +10,9 @@ double DFunc( double x) {
 }
 
 vector<double> Func2(vector<double> x) {
-    return vector<double>(cos(x[0] + 0.5) + x[1] - 0.8, sin(x[1]) - 2*x[0]-1.6);
-
+    
+    vector<double>A = { cos(x[0] + 0.5) + x[1] - 0.8, sin(x[1]) - 2 * x[0] - 1.6 };
+     return A;
 }
 
 vector<vector<double>> DFunc2(vector<double> x) {
@@ -54,26 +36,29 @@ void Tangent() {
         x -= fx/dfx;
         cout << n<<" " << setw(10) << x_prew << " " << setw(10) << fx << " " << setw(10) << dfx << " " << "\n";
     }
-    cout <<"F( " << x<<" )" << " = " << Func(x);
+    cout <<"F( " << x<<" )" << " = " << Func(x)<<endl<<endl;
 }
 
 void Tangent2() {
     int n = 0;
-    double x_prew = 0;
-    double x = 0.5;
-    long double fx, dfx;
-    cout << "n" << " " << setw(10) << "x" << " " << setw(10) << "F(x)" << " " << setw(10) << "F'(x)" << " " << "\n";
+    vector<double> x_prew = { 0., 0.};
+    vector<double> x = { 0.5, 0.5};
+    vector<double> fx;
+    vector<vector<double>> dfx;
+    
+    cout << "n" << " " << setw(18) << "x" << " " << setw(22) << "F(x)" << " " << setw(28) << "F'(x)" << " " << "\n";
     while (abs(x - x_prew) > EPS) {
         n += 1;
         x_prew = x;
-        fx = Func(x);
-        dfx = DFunc(x);
-        x -= fx / dfx;
-        cout << n << " " << setw(10) << x_prew << " " << setw(10) << fx << " " << setw(10) << dfx << " " << "\n";
+        fx = Func2(x);
+        dfx = DFunc2(x);
+        x = x - Inverse2(dfx) * fx;
+        cout << n << " "  << x_prew << " "  << fx << " "  << (dfx | vector<double>{56}) << " " << "\n";
     }
-    cout << "F( " << x << " )" << " = " << Func(x);
+    cout << "F " << x << " = " <<Func2(x);
 }
 int main() {
     Tangent();
+    Tangent2();
 	return 0;
 }
