@@ -37,7 +37,7 @@ ostream& operator<< (ostream& out, vector<vector<double>>A) {
     return out;
 }
 ostream& operator<< (ostream& out, vector<double>A) {
-    out << "(" << setw(11) << A[1];
+    out << "(" << setw(11) << A[0];
     for (int j = 1; j < A.size(); j++) {
         out << ", " << setw(11) << A[j];
     }
